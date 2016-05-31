@@ -521,7 +521,7 @@ class Characteristic(dbus.service.Object):
 
     @dbus.service.method(constants.GATT_CHRC_IFACE,
                          in_signature='a{sv}',
-                         out_signature='ay')
+                         out_signature='aya{sy}')
     def ReadValue(self, options):
         """Return the characteristic value.
 
@@ -531,9 +531,10 @@ class Characteristic(dbus.service.Object):
         # print('Reading Characteristic', self.value)
         if self.value is None:
             self.value = 0
-        return [dbus.Byte(self.value)]
+        return dbus.ByteArray([(self.value).to_bytes((self.value.bit_length() // 8) + 1, byteorder='little')])
+        # return self.value
 
-    @dbus.service.method(constants.GATT_CHRC_IFACE, in_signature='aya{sv}')
+    @dbus.service.method(constants.GATT_CHRC_IFACE, in_signature='aya{sy}')
     def WriteValue(self, value, options):
         """Set the characteristic value.
 
@@ -630,7 +631,7 @@ class Characteristic(dbus.service.Object):
         # print('Update prop')
         self.PropertiesChanged(
             constants.GATT_CHRC_IFACE,
-            {'Value': [dbus.Byte(self.value)]}, [])
+            {'Value': [dbus.Int16(self.value)]}, [])
 
 ####################
 # Descriptor Classes
