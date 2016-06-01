@@ -521,20 +521,18 @@ class Characteristic(dbus.service.Object):
 
     @dbus.service.method(constants.GATT_CHRC_IFACE,
                          in_signature='a{sv}',
-                         out_signature='aya{sy}')
+                         out_signature='ay')
     def ReadValue(self, options):
         """Return the characteristic value.
 
         This method is registered with the D-Bus at
         ``org.bluez.GattCharacteristic1``.
         """
-        # print('Reading Characteristic', self.value)
         if self.value is None:
             self.value = 0
-        return dbus.ByteArray([(self.value).to_bytes((self.value.bit_length() // 8) + 1, byteorder='little')])
-        # return self.value
+        return bluezutils.int_to_dbus_bytes(self.value)
 
-    @dbus.service.method(constants.GATT_CHRC_IFACE, in_signature='aya{sy}')
+    @dbus.service.method(constants.GATT_CHRC_IFACE, in_signature='aya{sv}')
     def WriteValue(self, value, options):
         """Set the characteristic value.
 
@@ -631,7 +629,7 @@ class Characteristic(dbus.service.Object):
         # print('Update prop')
         self.PropertiesChanged(
             constants.GATT_CHRC_IFACE,
-            {'Value': [dbus.Int16(self.value)]}, [])
+            {'Value': bluezutils.int_to_dbus_bytes(self.value)}, [])
 
 ####################
 # Descriptor Classes

@@ -19,37 +19,38 @@ def get_sensehat_pressure():
     else:
         return False
 
+
 def ble_change_update_rate():
     peripheral.GObject.timeout_add(1000, get_sensehat_pressure)
 
-
-
+# Bluetooth: Define service
 pressure_service = peripheral.Service(
     '11118000-2222-3333-4444-555566667777',
     True)
 
-
-# Pressure
+# Pressure characteristic
 pressure_characteristic = peripheral.Characteristic(
     '11118010-2222-3333-4444-555566667777',
-    ['read', 'notify'],
+    ['notify'],
     pressure_service,
     value=0)
 
 pressure_characteristic.add_notify_event(ble_change_update_rate)
 # Descriptor
-pressure_descriptor = peripheral.UserDescriptor('Pressure', pressure_characteristic)
+pressure_descriptor = peripheral.UserDescriptor('Pressure',
+                                                pressure_characteristic)
 pressure_characteristic.add_descriptor(pressure_descriptor)
 
-# Update Frequency
+# Update Frequency characteristic
 update_characteristic = peripheral.Characteristic(
     '11118011-2222-3333-4444-555566667777',
     ['read', 'write'],
     pressure_service,
-    value=1020)
+    value=1000)
 update_characteristic.add_write_event(ble_change_update_rate)
 # Descriptor
-update_descriptor = peripheral.UserDescriptor('update rate', update_characteristic)
+update_descriptor = peripheral.UserDescriptor('update rate',
+                                              update_characteristic)
 update_characteristic.add_descriptor(update_descriptor)
 
 pressure_service.add_characteristic(pressure_characteristic)

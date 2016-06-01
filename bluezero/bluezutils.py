@@ -231,3 +231,12 @@ def url_to_advert(url, frame_type, tx_power):
             service_data.extend([ord(url[x])])
 
     return service_data
+
+
+def int_to_dbus_bytes(value):
+    as_bytes = value.to_bytes(
+        (value.bit_length() // 8) + 1, byteorder='little')
+    return_val = []
+    for byte in as_bytes:
+        return_val.append(dbus.Byte(byte))
+    return return_val
