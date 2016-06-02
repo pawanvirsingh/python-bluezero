@@ -787,6 +787,49 @@ class UserDescriptor(Descriptor):
             raise NotPermittedException()
         self.value = value
 
+class FormatDescriptor(Descriptor):
+    """Bluez Descriptor Class for setting the format of the characteristic.
+
+    .. seealso:: :class:`Descriptor`
+    """
+
+    CPF_UUID = '2904'
+
+    def __init__(self, characteristic):
+        """"
+        This is fixed currently for millibars
+        """
+        self.writable = 'writable-auxiliaries' in characteristic.flags
+        # self.value = array.array('B', bytes(name, encoding='utf-8'))
+        self.value = [dbus.Byte(14), dbus.Byte(3), dbus.Byte(128), dbus.Byte(39), dbus.Byte(0), dbus.Byte(0)]
+        Descriptor.__init__(
+            self,
+            self.CPF_UUID,
+            ['read', 'write'],
+            characteristic)
+
+    def ReadValue(self, options):
+        """Return the descriptor value.
+
+        *(NB: This method is registered with the D-Bus at
+        ``org.bluez.GattDescriptor1``.)*
+        """
+        # print('Read Value: ', self.value)
+        return self.value
+
+    def WriteValue(self, value, options):
+        """Set the descriptor value.
+
+        *(NB: This method is registered with the D-Bus at
+        ``org.bluez.GattCharacteristic1``.)*
+
+        Checks that the descriptor is writeable, and if so writes the value.
+        """
+        # print('Write Value: ', value)
+        if not self.writable:
+            raise NotPermittedException()
+        self.value = value
+
 ###################################
 # Advertisement Class and Callbacks
 ###################################
