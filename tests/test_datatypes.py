@@ -5,6 +5,7 @@ import unittest
 
 from bluezero import tools
 
+
 class Uint16(unittest.TestCase):
     @given(st.integers(0, 65535))
     def test(self, x):

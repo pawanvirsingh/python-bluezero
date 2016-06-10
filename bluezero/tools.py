@@ -267,6 +267,7 @@ Format | Short Name | Description | Exponent Value
 0x1B | struct | Opaque structure | No
 """
 
+
 def int_to_uint16(value):
     as_bytes = value.to_bytes(
         (value.bit_length() // 8) + 1, byteorder='little')
@@ -274,6 +275,7 @@ def int_to_uint16(value):
     for byte in as_bytes:
         return_val.append(dbus.Byte(byte))
     return return_val
+
 
 def uint16_to_int(value):
     return int.from_bytes(value, byteorder='little')
