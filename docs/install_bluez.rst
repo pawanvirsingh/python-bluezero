@@ -37,6 +37,7 @@ If you are looking to development of Bluezero then you will need::
     sudo apt-get install python-dbusmock
     # Do I need the following?
     sudo apt-get install python3-dbusmock
+    sudo pip3 install hypothesis
 
 
 
