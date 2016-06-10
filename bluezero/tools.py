@@ -269,8 +269,11 @@ Format | Short Name | Description | Exponent Value
 
 
 def int_to_uint16(value):
-    as_bytes = value.to_bytes(
-        (value.bit_length() // 8) + 1, byteorder='little')
+    if value.bit_length() > 16:
+        raise ValueError('value to large for uint16')
+    elif value < 0:
+        raise ValueError("value can't be negative for uint16")
+    as_bytes = value.to_bytes(2, byteorder='little')
     return_val = []
     for byte in as_bytes:
         return_val.append(dbus.Byte(byte))

@@ -5,7 +5,7 @@ sudo: required
 # https://docs.travis-ci.com/user/multi-os/
 python:
   - "2.7"
-  - "3.4"
+  - "3.2"
 virtualenv:
   system_site_packages: true
 # matrix:
@@ -28,7 +28,6 @@ install:
   # - pip install --upgrade pip
   - pip install pep8
   - pip install python-dbusmock
-  - pip install hypothesis
 before_script:
   # - .travis/setup.sh
   # - echo "Travis Python Version ***********"
